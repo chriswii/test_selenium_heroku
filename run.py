@@ -1,4 +1,5 @@
 from selenium import webdriver
+import os
 import requests
 
 headers = {
