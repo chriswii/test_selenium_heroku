@@ -1,4 +1,10 @@
 from selenium import webdriver
+import requests
+
+headers = {
+    "Authorization": "Bearer " + "Kr09nUuaYJC05p9kI6UMoxCIbKzyAwZ461ycDzjUWic",
+    "Content-Type": "application/x-www-form-urlencoded"
+}
 
 
 chrome_options = webdriver.ChromeOptions()
@@ -13,5 +19,10 @@ driver.get("https://www.tutorialspoint.com/index.htm")
 # identify element
 l=driver.find_element_by_css_selector("h4")
 # get text and print
-print("Text is: " + l.text)
+#print("Text is: " + l.text)
+
+params = {"message": f"{l.text}"}
+r = requests.post("https://notify-api.line.me/api/notify",
+                  headers=headers, params=params)
+
 driver.close()
