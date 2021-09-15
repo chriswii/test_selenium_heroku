@@ -17,7 +17,7 @@ if __name__ == '__main__':
     #maximize with maximize_window()
     #driver.maximize_window()
     driver.get("https://www.tutorialspoint.com/index.htm")
-     identify element
+    #identify element
     l=driver.find_element_by_css_selector("h4")
     # get text and print
     #print("Text is: " + l.text)
