@@ -21,7 +21,7 @@ l=driver.find_element_by_css_selector("h4")
 # get text and print
 #print("Text is: " + l.text)
 
-params = {"message": f"{l.text}"}
+params = {"message": "!!test from selenium!!!"}
 r = requests.post("https://notify-api.line.me/api/notify",
                   headers=headers, params=params)
 
