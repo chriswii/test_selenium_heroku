@@ -57,6 +57,6 @@ if __name__ == '__main__':
 
     while True:
         check_availability(driver)
-        time.sleep(20)
+        time.sleep(5)
 
     driver.close()
