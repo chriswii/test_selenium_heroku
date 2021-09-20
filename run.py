@@ -10,7 +10,7 @@ headers = {
 }
 
 url = "https://sports.tms.gov.tw/venues/?K=49#Schedule"
-elements_id = {"2021-10-2 10 am":"10497834", "2021-10-3 10 am":"10497858"}
+elements_id = {"2021-10-02 10 am":"10497834", "2021-10-03 10 am":"10497858"}
 
 def check_availability():
     driver = webdriver.Chrome(executable_path = os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
@@ -34,7 +34,13 @@ def check_availability():
         l = driver.find_element_by_xpath(f"//*[@id='Sched.{elements_id[i]}']")
         print(f"Value: {l.text}")
 
-        params = {"message": f"{i}: {l.text}"}
+        print(f"Checking {i} if it startswith {i[11]}")
+        if l.text.startswith(i[11]):
+            #params = {"message": f"測試line notify 我找到 {l1_time} {l1.text} 有開放 趕快去訂 "}
+            params = {"message": f"!!! 我找到 {i} {l.text} 有開放 趕快去訂 !!!"}
+        else:
+            params = {"message": f"*** 自動檢查 台北體育館 {i} 沒有開放. 原因: {l.text}"}
+
         r = requests.post("https://notify-api.line.me/api/notify",
                           headers=headers, params=params)
 
@@ -48,5 +54,6 @@ if __name__ == '__main__':
     chrome_options.add_argument('--headless')
     chrome_options.add_argument('--disable-gpu')
 
-    check_availability()
-    
+    while True:
+        check_availability()
+        time.sleep(30)
