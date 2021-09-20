@@ -13,7 +13,7 @@ url = "https://sports.tms.gov.tw/venues/?K=49#Schedule"
 elements_id = {"2021-10-02 10 am":"10497834", "2021-10-03 10 am":"10497858"}
 
 def check_availability():
-    driver = webdriver.Chrome(executable_path = os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
+    
     #maximize with maximize_window()
     #driver.maximize_window()
     driver.get(url)
@@ -44,7 +44,7 @@ def check_availability():
         r = requests.post("https://notify-api.line.me/api/notify",
                           headers=headers, params=params)
 
-    driver.close()
+    
 
 
 if __name__ == '__main__':
@@ -53,7 +53,10 @@ if __name__ == '__main__':
     chrome_options.add_argument('--no-sandbox')
     chrome_options.add_argument('--headless')
     chrome_options.add_argument('--disable-gpu')
+    driver = webdriver.Chrome(executable_path = os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
 
     while True:
-        check_availability()
+        check_availability(driver)
         time.sleep(20)
+
+    driver.close()
