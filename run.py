@@ -12,15 +12,34 @@ headers = {
 url = "https://sports.tms.gov.tw/venues/?K=49#Schedule"
 elements_id = {"2021-10-02 10 am":"10497834", "2021-10-03 10 am":"10497858"}
 
+def send_line_notification(params):
+    r = requests.post("https://notify-api.line.me/api/notify",
+                          headers=headers, params=params)
+
+
+def check_exists_by_xpath(driver, xpath):
+    try:
+        driver.find_element_by_xpath(xpath)
+    except NoSuchElementException:
+        return False
+    return True
+
+
 def check_availability(driver):
-    
-    #maximize with maximize_window()
-    #driver.maximize_window()
     driver.get(url)
-    #identify element
-    time.sleep(5)
-    target = driver.find_element_by_xpath('//*[@id="PickupDateInterFaceBox"]')
-    #driver.execute_script('arguments[0].scrollIntoView();', target)
+    
+    trial_count = 10
+    while (check_exists_by_xpath(driver, '//*[@id="PickupDateInterFaceBox"]') is not True and trial_count > 0):
+        trial_count -= 1
+        time.sleep(3)
+    
+    try:
+        target = driver.find_element_by_xpath('//*[@id="PickupDateInterFaceBox"]')
+    except NoSuchElementException:
+        params = {"message": f"!!! 程式發生錯誤! 請檢察系統"}
+        send_line_notification(params)
+
+
     action = ActionChains(driver)
     action.move_to_element(target).perform()
     time.sleep(1)
@@ -36,13 +55,11 @@ def check_availability(driver):
 
         print(f"Checking {i} if it startswith {i[11]}")
         if l.text.startswith(i[11]):
-            #params = {"message": f"測試line notify 我找到 {l1_time} {l1.text} 有開放 趕快去訂 "}
             params = {"message": f"!!! 我找到 {i} {l.text} 有開放 趕快去訂 !!!"}
         else:
             params = {"message": f"*** 自動檢查 台北體育館 {i} 沒有開放. 原因: {l.text}"}
 
-        r = requests.post("https://notify-api.line.me/api/notify",
-                          headers=headers, params=params)
+        send_line_notification(params)
 
     
 
@@ -57,6 +74,6 @@ if __name__ == '__main__':
 
     while True:
         check_availability(driver)
-        time.sleep(5)
+        time.sleep(10)
 
     driver.close()
