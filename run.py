@@ -1,6 +1,8 @@
 from selenium import webdriver
+from selenium.webdriver.common.action_chains import ActionChains
 import os
 import requests
+import time
 
 headers = {
     "Authorization": "Bearer " + "Kr09nUuaYJC05p9kI6UMoxCIbKzyAwZ461ycDzjUWic",
@@ -17,11 +19,21 @@ if __name__ == '__main__':
     driver = webdriver.Chrome(executable_path = os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
     #maximize with maximize_window()
     #driver.maximize_window()
-    driver.get("https://www.tutorialspoint.com/index.htm")
+    driver.get("https://sports.tms.gov.tw/venues/?K=49#Schedule")
     #identify element
-    l=driver.find_element_by_css_selector("h4")
-    # get text and print
-    #print("Text is: " + l.text)
+    target = driver.find_element_by_xpath('//*[@id="PickupDateInterFaceBox"]')
+    #driver.execute_script('arguments[0].scrollIntoView();', target)
+    action = ActionChains(driver)
+    action.move_to_element(target).perform()
+    time.sleep(1)
+    for _ in range(5):
+        driver.execute_script("arguments[0].scrollBy(900,0)", target);
+        time.sleep(0.5)
+    
+    time.sleep(1)
+    
+    l = driver.find_element_by_xpath("//*[@id='Sched.10497834']")
+    print(f"Value: {l.text}")
 
     params = {"message": f"{l.text}"}
     r = requests.post("https://notify-api.line.me/api/notify",
