@@ -85,7 +85,7 @@ if __name__ == '__main__':
     driver = webdriver.Chrome(executable_path = os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
 
     while True:
-        if random.randint(0,20) == 10:
+        if random.randint(0,30) == 10:
             params = {"message": f"*** 請放心 我還在跑呦"}
             send_line_notification(params)
 
