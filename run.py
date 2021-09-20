@@ -53,8 +53,17 @@ def check_availability(driver):
     time.sleep(1)
     
     for i in elements_id:
-        l = driver.find_element_by_xpath(f"//*[@id='Sched.{elements_id[i]}']")
-        print(f"Value: {l.text}")
+        trial_count = 10
+        while (check_exists_by_xpath(driver, f"//*[@id='Sched.{elements_id[i]}']") is not True and trial_count > 0):
+            trial_count -= 1
+            time.sleep(3)
+
+        try:
+            l = driver.find_element_by_xpath(f"//*[@id='Sched.{elements_id[i]}']")
+            print(f"Value: {l.text}")
+        except NoSuchElementException:
+            params = {"message": f"!!! 程式發生錯誤! 請檢察系統"}
+            send_line_notification(params)
 
         print(f"Checking {i} if it startswith {i[11]}")
         if l.text.startswith(i[11]):
@@ -80,6 +89,6 @@ if __name__ == '__main__':
             send_line_notification(params)
 
         check_availability(driver)
-        time.sleep(10)
+        time.sleep(20)
 
     driver.close()
