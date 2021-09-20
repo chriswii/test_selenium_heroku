@@ -21,7 +21,7 @@ if __name__ == '__main__':
     #driver.maximize_window()
     driver.get("https://sports.tms.gov.tw/venues/?K=49#Schedule")
     #identify element
-    time.sleep(3)
+    time.sleep(5)
     target = driver.find_element_by_xpath('//*[@id="PickupDateInterFaceBox"]')
     #driver.execute_script('arguments[0].scrollIntoView();', target)
     action = ActionChains(driver)
