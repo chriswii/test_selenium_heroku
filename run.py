@@ -33,10 +33,20 @@ if __name__ == '__main__':
     
     time.sleep(1)
     
+    l_time = "2021-10-2 10 am"
     l = driver.find_element_by_xpath("//*[@id='Sched.10497834']")
     print(f"Value: {l.text}")
 
-    params = {"message": f"{l.text}"}
+    params = {"message": f"{l_time}: {l.text}"}
+    r = requests.post("https://notify-api.line.me/api/notify",
+                      headers=headers, params=params)
+
+
+    l_time = "2021-10-3 10 am"
+    l = driver.find_element_by_xpath("//*[@id='Sched.10497858']")
+    print(f"Value: {l.text}")
+
+    params = {"message": f"{l_time}: {l.text}"}
     r = requests.post("https://notify-api.line.me/api/notify",
                       headers=headers, params=params)
 
