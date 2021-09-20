@@ -9,17 +9,14 @@ headers = {
     "Content-Type": "application/x-www-form-urlencoded"
 }
 
+url = "https://sports.tms.gov.tw/venues/?K=49#Schedule"
+elements_id = {"2021-10-2 10 am":"10497834", "2021-10-3 10 am":"10497858"}
 
-if __name__ == '__main__':
-    chrome_options = webdriver.ChromeOptions()
-    chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
-    chrome_options.add_argument('--no-sandbox')
-    chrome_options.add_argument('--headless')
-    chrome_options.add_argument('--disable-gpu')
+def check_availability():
     driver = webdriver.Chrome(executable_path = os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
     #maximize with maximize_window()
     #driver.maximize_window()
-    driver.get("https://sports.tms.gov.tw/venues/?K=49#Schedule")
+    driver.get(url)
     #identify element
     time.sleep(5)
     target = driver.find_element_by_xpath('//*[@id="PickupDateInterFaceBox"]')
@@ -33,21 +30,23 @@ if __name__ == '__main__':
     
     time.sleep(1)
     
-    l_time = "2021-10-2 10 am"
-    l = driver.find_element_by_xpath("//*[@id='Sched.10497834']")
-    print(f"Value: {l.text}")
+    for i in elements_id:
+        l = driver.find_element_by_xpath(f"//*[@id='Sched.{elements_id[i]}']")
+        print(f"Value: {l.text}")
 
-    params = {"message": f"{l_time}: {l.text}"}
-    r = requests.post("https://notify-api.line.me/api/notify",
-                      headers=headers, params=params)
-
-
-    l_time = "2021-10-3 10 am"
-    l = driver.find_element_by_xpath("//*[@id='Sched.10497858']")
-    print(f"Value: {l.text}")
-
-    params = {"message": f"{l_time}: {l.text}"}
-    r = requests.post("https://notify-api.line.me/api/notify",
-                      headers=headers, params=params)
+        params = {"message": f"{i}: {l.text}"}
+        r = requests.post("https://notify-api.line.me/api/notify",
+                          headers=headers, params=params)
 
     driver.close()
+
+
+if __name__ == '__main__':
+    chrome_options = webdriver.ChromeOptions()
+    chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
+    chrome_options.add_argument('--no-sandbox')
+    chrome_options.add_argument('--headless')
+    chrome_options.add_argument('--disable-gpu')
+
+    check_availability()
+    
