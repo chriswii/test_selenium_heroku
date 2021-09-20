@@ -12,7 +12,7 @@ headers = {
 url = "https://sports.tms.gov.tw/venues/?K=49#Schedule"
 elements_id = {"2021-10-02 10 am":"10497834", "2021-10-03 10 am":"10497858"}
 
-def check_availability():
+def check_availability(driver):
     
     #maximize with maximize_window()
     #driver.maximize_window()
