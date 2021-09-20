@@ -27,9 +27,9 @@ if __name__ == '__main__':
     action = ActionChains(driver)
     action.move_to_element(target).perform()
     time.sleep(1)
-    for _ in range(6):
+    for _ in range(8):
         driver.execute_script("arguments[0].scrollBy(900,0)", target);
-        time.sleep(0.5)
+        time.sleep(1)
     
     time.sleep(1)
     
