@@ -94,6 +94,6 @@ if __name__ == '__main__':
             send_line_notification(params)
 
         check_availability(driver)
-        time.sleep(20)
+        time.sleep(30)
 
     driver.close()
