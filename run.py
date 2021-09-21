@@ -87,7 +87,7 @@ if __name__ == '__main__':
 
     while True:
         if random.randint(0,30) == 10:
-            params = {"message": f"*** 請放心 我還在跑呦"}
+            params = {"message": f"*** 請放心 我還在跑呦😀"}
             send_line_notification(params)
 
         check_availability(driver)
