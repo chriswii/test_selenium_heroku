@@ -68,11 +68,11 @@ def check_availability(driver):
 
         print(f"Checking {i} if it startswith {i[11]}")
         if l.text.startswith(i[11]):
-            params = {"message": f"!!! 我找到 {i} {l.text} 有開放 趕快去訂 !!!"}
+            params = {"message": f"‼️‼️ 我找到 {i} {l.text} 有開放 趕快去訂 ‼️‼️"}
             send_line_notification(params)
         else:
-            if debug_flag:
-                params = {"message": f"*** 自動檢查 台北體育館 {i} 沒有開放. 原因: {l.text}"}
+            if debug_flag or random.randint(0,50) == 10:
+                params = {"message": f"*** 😀 自動檢查 台北體育館 {i} 沒有開放. 原因: {l.text}"}
                 send_line_notification(params)
 
 
@@ -86,7 +86,7 @@ if __name__ == '__main__':
     driver = webdriver.Chrome(executable_path = os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
 
     while True:
-        if random.randint(0,30) == 10:
+        if random.randint(0,50) == 10:
             params = {"message": f"*** 請放心 我還在跑呦😀"}
             send_line_notification(params)
 
