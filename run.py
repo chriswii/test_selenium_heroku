@@ -5,6 +5,7 @@ import os
 import requests
 import time
 import random
+import psycopg2
 
 debug_flag = False
 
@@ -14,7 +15,50 @@ headers = {
 }
 
 url = "https://sports.tms.gov.tw/venues/?K=49#Schedule"
-elements_id = {"2021-10-02 10 am":"10497834", "2021-10-03 10 am":"10497858"}
+elements_id = dict()
+
+
+class PostgresBaseManager:
+
+    def __init__(self):
+
+        self.database = 'd4huo08q01ibjl'
+        self.user = 'xgaurqsmfgazfi'
+        self.password = '1008e263088ac516f659d9e0eada575bec6b0c4acffa5279b36806664a43165b'
+        self.host = 'ec2-52-45-238-24.compute-1.amazonaws.com'
+        self.port = '5432'
+        self.conn = self.connectServerPostgresDb()
+
+    def connectServerPostgresDb(self):
+        """
+        :return: 連接 Heroku Postgres SQL 認證用
+        """
+        conn = psycopg2.connect(
+            database=self.database,
+            user=self.user,
+            password=self.password,
+            host=self.host,
+            port=self.port)
+        return conn
+
+    def closePostgresConnection(self):
+        """
+        :return: 關閉資料庫連線使用
+        """
+        self.conn.close()
+
+    def runServerPostgresDb(self):
+        """
+        :return: 測試是否可以連線到 Heroku Postgres SQL
+        """
+        cur = self.conn.cursor()
+        cur.execute('SELECT * FROM taipeigym')
+        results = cur.fetchall()
+        global elements_id
+        elements_id = {x.strip(): y.strip() for (x,y) in results}
+        self.conn.commit()
+        cur.close()
+
 
 def send_line_notification(params):
     r = requests.post("https://notify-api.line.me/api/notify",
@@ -80,6 +124,10 @@ def check_availability(driver):
 
 
 if __name__ == '__main__':
+    postgres_manager = PostgresBaseManager()
+    postgres_manager.runServerPostgresDb()
+    postgres_manager.closePostgresConnection()
+    print(f"elements_id: {elements}")
     chrome_options = webdriver.ChromeOptions()
     chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
     chrome_options.add_argument('--no-sandbox')
