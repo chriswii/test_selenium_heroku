@@ -127,7 +127,7 @@ if __name__ == '__main__':
     postgres_manager = PostgresBaseManager()
     postgres_manager.runServerPostgresDb()
     postgres_manager.closePostgresConnection()
-    print(f"elements_id: {elements}")
+    print(f"elements_id: {elements_id}")
     chrome_options = webdriver.ChromeOptions()
     chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
     chrome_options.add_argument('--no-sandbox')
