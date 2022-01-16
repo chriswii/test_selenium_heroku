@@ -118,7 +118,7 @@ def check_availability(driver):
             params = {"message": f"😣 已經被搶走了 時間:{i} 顯示為{l.text} "}
             send_line_notification(params)
         else:
-            if debug_flag or random.randint(0,200) == 10:
+            if debug_flag or random.randint(0,100) == 10:
                 params = {"message": f"*** 😀 自動檢查 台北體育館 {i} 沒有開放. 原因: {l.text}"}
                 send_line_notification(params)
 
