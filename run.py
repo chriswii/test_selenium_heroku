@@ -110,8 +110,8 @@ def check_availability(driver):
             params = {"message": f"!!! 程式發生錯誤! 請檢察系統"}
             send_line_notification(params)
 
-        print(f"Checking {i} if it startswith {i[11:13]}")
-        if l.text.startswith(i[11:13]):
+        print(f"Checking {i} if it startswith {i[11:13]} or 已過期")
+        if l.text.startswith(i[11:13]) or l.text.startswith("已過期"):
             params = {"message": f"‼️‼️ 我找到 {i} {l.text} 有開放 趕快去訂 ‼️‼️"}
             send_line_notification(params)
         elif l.text.startswith("零租"):
